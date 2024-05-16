@@ -20,8 +20,29 @@ public class App {
         countries.add(new Country(6, "China", "Asia", 100000));
         countries.add(new Country(8, "Croatia", "Europe", 120000));
         countries.add(new Country(10, "Finland", "Europe", 140000));
-        Collections.sort(countries);
+Comparator<Country> comparatorByPoplation = new Comparator<Country>(){
+    @Override
+    public int compare(Country o1, Country o2) {
+        if (o1.getPopulation() > o2.getPopulation()) {
+            return 1;
+        } else
+            return -1;
+    }
+};
+        Comparator<Country> comparatorById = new Comparator<Country>(){
+            @Override
+            public int compare(Country o1, Country o2) {
+                if (o1.getId() > o2.getId()) {
+                    return 1;
+                } else
+                    return -1;
+            }
+        };
+        // Collections.sort(countries);
+        //Collections.sort(countries,comparatorByPoplation);
+        Collections.sort(countries,comparatorById);
 
+        System.out.println(countries);
 
         /*Map that have population as value and country name as key*/
         Map<String, Integer> countryPopulationMap = countries.stream()
@@ -46,9 +67,8 @@ public class App {
 
 
 
-        Map<String, List<String>> continentToCountriesMap = countries.stream()
-                .collect(Collectors.groupingBy(Country::getContinent,
-                        Collectors.mapping(Country::getName, Collectors.toList())));
+        Map<String, List<Country>> continentToCountriesMap = countries.stream()
+                .collect(Collectors.groupingBy(Country::getContinent));
         continentToCountriesMap.forEach((continent, countryList) -> {
             System.out.println("Continent: " + continent + " -> Countries: " + countryList);
         });
